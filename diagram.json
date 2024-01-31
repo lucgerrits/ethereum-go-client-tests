@@ -1,0 +1,96 @@
+{
+    "sendEther": [
+        {
+            "functionName": "Connect to an Ethereum client",
+            "functionCall": "ethclient.Dial",
+            "arguments": [
+                "http://localhost:8545"
+            ],
+            "return": "client",
+            "errorHandling": "log.Fatal"
+        },
+        {
+            "functionName": "Get the private key for the sender",
+            "functionCall": "crypto.HexToECDSA",
+            "arguments": [
+                "7275b963ffc4603c02d3481ed99755b82a26702c0a90a3408ac02c12c082ddb7"
+            ],
+            "return": "privateKey",
+            "errorHandling": "log.Fatal"
+        },
+        {
+            "functionName": "Get the recipient's address",
+            "functionCall": "common.HexToAddress",
+            "arguments": [
+                "0xD92373D4BB00e93FaF91fD127492763d289e9487"
+            ],
+            "return": "toAddress"
+        },
+        {
+            "functionName": "Get the suggested gas price",
+            "functionCall": "client.SuggestGasPrice",
+            "arguments": [],
+            "return": "gasPrice",
+            "errorHandling": "log.Fatal"
+        },
+        {
+            "functionName": "Get the nonce for the sender",
+            "functionCall": "client.PendingNonceAt",
+            "arguments": [
+                "fromAddress"
+            ],
+            "return": "nonce",
+            "errorHandling": "return err"
+        },
+        {
+            "functionName": "Create the transaction",
+            "functionCall": "types.NewTransaction",
+            "arguments": [
+                "nonce",
+                "toAddress",
+                "value",
+                "gasLimit",
+                "gasPrice",
+                null
+            ],
+            "return": "tx"
+        },
+        {
+            "functionName": "Get the chain ID",
+            "functionCall": "new(big.Int).SetInt64",
+            "arguments": [
+                1337
+            ],
+            "return": "chainID"
+        },
+        {
+            "functionName": "Sign the transaction",
+            "functionCall": "types.SignTx",
+            "arguments": [
+                "tx",
+                "types.NewEIP155Signer(chainID)",
+                "privateKey"
+            ],
+            "return": "signedTx",
+            "errorHandling": "return err"
+        },
+        {
+            "functionName": "Send the transaction",
+            "functionCall": "client.SendTransaction",
+            "arguments": [
+                "signedTx"
+            ],
+            "return": null,
+            "errorHandling": "return err"
+        },
+        {
+            "functionName": "Print the transaction hash",
+            "functionCall": "fmt.Printf",
+            "arguments": [
+                "Transaction hash: 0x%x\n",
+                "signedTx.Hash()"
+            ],
+            "return": null
+        }
+    ]
+}
